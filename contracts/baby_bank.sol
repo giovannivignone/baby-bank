@@ -15,6 +15,11 @@ contract baby_bank {
         withdraw_time[msg.sender] = (2**256) - 1;
     }
 
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit amount must be greater than zero.");
+        balance[msg.sender] += msg.value;
+    }
+
     function withdraw() public {
         if (balance[msg.sender] == 0) {
             return;
