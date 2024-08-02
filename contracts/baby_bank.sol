@@ -15,21 +15,9 @@ contract baby_bank {
         withdraw_time[msg.sender] = (2**256) - 1;
     }
 
-    function deposit(
-        uint256 _t,
-        address _tg,
-        string calldata _n
-    ) public payable {
-        if (user[msg.sender] == 0) {
-            revert();
-        }
-
-        if (user[_tg] != keccak256(abi.encodePacked((_n)))) {
-            revert();
-        }
-
-        withdraw_time[_tg] = block.number + _t;
-        balance[_tg] = msg.value;
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit amount must be greater than zero.");
+        balance[msg.sender] += msg.value;
     }
 
     function withdraw() public {
