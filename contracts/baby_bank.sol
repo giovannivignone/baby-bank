@@ -27,8 +27,5 @@ contract baby_bank is ReentrancyGuard {
         require(balance[msg.sender] > 0);
         uint256 amountOfCallersBalance = balance[msg.sender]; // safely fetching the balance of the caller
         balance[msg.sender] = 0;
-        
-        (bool success, ) = msg.sender.call{value: amountOfCallersBalance}(""); // safely sending the balance to the caller
-        require(success, "Transfer failed."); // if the transfer fails, revert the transaction
     }
 }
