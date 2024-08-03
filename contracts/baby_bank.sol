@@ -1,8 +1,8 @@
-pragma solidity ^0.7.6;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract baby_bank {
+contract baby_bank is ReentrancyGuard {
     mapping(address => uint256) public balance;
     mapping(address => uint256) public withdraw_time;
     mapping(address => bytes32) public user;
@@ -28,7 +28,7 @@ contract baby_bank {
         uint256 amountOfCallersBalance = balance[msg.sender]; // safely fetching the balance of the caller
         balance[msg.sender] = 0;
         
-        (bool success, ) = msg.sender.call{value: amount}(""); // safely sending the balance to the caller
+        (bool success, ) = msg.sender.call{value: amountOfCallersBalance}(""); // safely sending the balance to the caller
         require(success, "Transfer failed."); // if the transfer fails, revert the transaction
     }
 }
