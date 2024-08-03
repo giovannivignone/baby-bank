@@ -25,6 +25,8 @@ contract baby_bank {
         require(balance[msg.sender] > 0);
         uint256 amount = balance[msg.sender];
         balance[msg.sender] = 0;
-        msg.sender.transfer(amount);
+        
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Transfer failed.");
     }
 }
