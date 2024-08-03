@@ -1,6 +1,8 @@
-pragma solidity ^0.7.6;
+pragma solidity ^0.8.20;
 
-contract baby_bank {
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract baby_bank is ReentrancyGuard {
     mapping(address => uint256) public balance;
     mapping(address => uint256) public withdraw_time;
     mapping(address => bytes32) public user;
@@ -20,23 +22,10 @@ contract baby_bank {
         balance[msg.sender] += msg.value;
     }
 
-    function withdraw() public {
-        if (balance[msg.sender] == 0) {
-            return;
-        }
-        uint256 gift = 0;
-        uint256 lucky = 0;
-
-        if (block.number > withdraw_time[msg.sender]) {
-            lucky =
-                uint256(keccak256(abi.encodePacked(block.number, msg.sender))) %
-                10;
-            if (lucky == 0) {
-                gift = (10**15) * withdraw_time[msg.sender];
-            }
-        }
-        uint256 amount = balance[msg.sender] + gift;
+    function withdraw() public nonReentrant {
+        require(block.number >= withdraw_time[msg.sender]);
+        require(balance[msg.sender] > 0);
+        uint256 amountOfCallersBalance = balance[msg.sender]; // safely fetching the balance of the caller
         balance[msg.sender] = 0;
-        msg.sender.transfer(amount);
     }
 }
