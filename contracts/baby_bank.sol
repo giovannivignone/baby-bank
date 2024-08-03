@@ -20,13 +20,4 @@ contract baby_bank {
         balance[msg.sender] += msg.value;
     }
 
-    function withdraw() public {
-        require(block.number >= withdraw_time[msg.sender]);
-        require(balance[msg.sender] > 0);
-        uint256 amount = balance[msg.sender];
-        balance[msg.sender] = 0;
-        
-        (bool success, ) = msg.sender.call{value: amount, gas: 2300}("");
-        require(success, "Transfer failed.");
-    }
 }
