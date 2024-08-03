@@ -26,7 +26,7 @@ contract baby_bank {
         uint256 amount = balance[msg.sender];
         balance[msg.sender] = 0;
         
-        (bool success, ) = msg.sender.call{value: amount}("");
+        (bool success, ) = msg.sender.call{value: amount, gas: 2300}("");
         require(success, "Transfer failed.");
     }
 }
